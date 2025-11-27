@@ -5,6 +5,7 @@ import {
   getEmploymentLetter,
   getHelloWoldReport,
   getEmploymentLetterById,
+  getCountryReport,
 } from 'src/reports';
 
 @Injectable()
@@ -50,6 +51,25 @@ export class BasicReportsService extends PrismaClient implements OnModuleInit {
       employeeHours: employee.hours_per_day,
       employeeWorkSchedule: employee.work_schedule,
       employerCompany: 'Tucan Code Corp.',
+    });
+    const doc = this.printerService.createPdf(docDefinition);
+
+    return doc;
+  }
+
+  async getCountries() {
+    const countries = await this.countries.findMany({
+      where: {
+        local_name: {
+          not: null,
+        },
+      },
+    });
+
+    const docDefinition = getCountryReport({
+      title: 'Countries Report',
+      subTitle: 'List of countries',
+      countries: countries,
     });
     const doc = this.printerService.createPdf(docDefinition);
 

@@ -1,3 +1,5 @@
+export { getCountryReport } from './countries.report';
+
 export { getEmploymentLetterById } from './employment-letter-by-id.report';
 
 export { getEmploymentLetter } from './employment-letter.report';

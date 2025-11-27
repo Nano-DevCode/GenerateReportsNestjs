@@ -15,27 +15,56 @@ const logo: Content = {
   margin: [0, 0, 0, 20],
 };
 
+const currentDate: Content = {
+  text: DateFormatter.getDDMMMMYYYY(new Date()),
+  alignment: 'right',
+  margin: [20, 20],
+};
+
 export const headerSection = (options: HeaderOption): Content => {
   const { title, subTitle, showLogo = true, showDate = true } = options;
 
-  const headerLogo: Content | null = showLogo ? logo : null;
-  const headerDate: Content | null = showDate
+  const headerSubTitle: Content | null = subTitle
     ? {
-        text: DateFormatter.getDDMMMMYYYY(new Date()),
-        alignment: 'right',
-        margin: [20, 20],
-      }
-    : null;
-  const headerTitle: Content | null = title
-    ? {
-        text: title,
+        text: subTitle,
+        alignment: 'center',
+        margin: [0, 2, 0, 0],
         style: {
+          fontSize: 16,
           bold: true,
         },
       }
     : null;
+  const headerLogo: Content | null = showLogo ? logo : null;
+  const headerDate: Content | null = showDate ? currentDate : null;
+  const headerTitle: Content | null = title
+    ? {
+        stack: [
+          {
+            text: title,
+            alignment: 'center',
+            margin: [0, 15, 0, 0],
+            style: {
+              bold: true,
+              fontSize: 22,
+            },
+          },
+          headerSubTitle,
+        ].filter(Boolean) as Content[],
+      }
+    : null;
 
   return {
-    columns: [headerLogo, headerTitle, headerDate].filter(Boolean) as Content[],
+    columns: [
+      headerLogo,
+      { width: '*', text: '' },
+      {
+        width: 'auto',
+        stack: [headerTitle].filter(Boolean),
+        alignment: 'center',
+      },
+      { width: '*', text: '' },
+      headerDate,
+    ].filter(Boolean) as Content[],
   };
 };
