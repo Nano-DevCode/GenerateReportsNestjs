@@ -57,12 +57,10 @@ export class BasicReportsService extends PrismaClient implements OnModuleInit {
     return doc;
   }
 
-  async getCountries() {
+  async getCountries(countrie?: string) {
     const countries = await this.countries.findMany({
       where: {
-        local_name: {
-          not: null,
-        },
+        local_name: countrie ? countrie : { not: null },
       },
     });
 

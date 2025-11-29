@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { BasicReportsService } from './basic-reports.service';
 import type { Response } from 'express';
 
@@ -37,8 +37,11 @@ export class BasicReportsController {
   }
 
   @Get('countries')
-  async getContriesRepot(@Res() response: Response) {
-    const pdfDoc = await this.basicReportsService.getCountries();
+  async getContriesRepot(
+    @Res() response: Response,
+    @Query('countrie') countrie?: string,
+  ) {
+    const pdfDoc = await this.basicReportsService.getCountries(countrie);
     response.setHeader('Content-Type', 'application/pdf');
     pdfDoc.info.Title = 'Countries-Report';
     pdfDoc.pipe(response);
